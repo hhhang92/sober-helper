@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#10b981">
+<title>清醒 · 戒酒助手</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:linear-gradient(180deg,#ecfdf5,#f0fdfa 40%,#fff);color:#1e293b;min-height:100dvh}
+.wrap{max-width:28rem;margin:0 auto;padding:0 16px 110px}
+header{max-width:28rem;margin:0 auto;display:flex;align-items:center;gap:8px;padding:24px 20px 8px;font-weight:700}
+header .gear{margin-left:auto;border:none;background:none;color:#94a3b8;font-size:18px;padding:6px;cursor:pointer}
+.card{background:rgba(255,255,255,.8);border:1px solid #d1fae5;border-radius:20px;padding:18px;margin-bottom:14px}
+.hero{background:linear-gradient(135deg,#10b981,#0d9488);color:#fff;text-align:center;border-radius:24px;padding:26px 18px;box-shadow:0 10px 25px -8px rgba(16,185,129,.5);margin-bottom:14px}
+.hero .days{font-size:56px;font-weight:900;line-height:1.1}
+.hero .days small{font-size:22px;font-weight:700}
+.hero .clock{font-family:ui-monospace,monospace;font-size:18px;opacity:.9;margin-top:4px}
+.hero .sub{font-size:12px;opacity:.75;margin-top:10px}
+.btn{border:none;border-radius:14px;padding:13px;font-size:15px;font-weight:600;cursor:pointer;transition:transform .1s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:#059669;color:#fff;width:100%;box-shadow:0 4px 12px -4px rgba(5,150,105,.5)}
+.btn-white{background:#fff;color:#047857;border-radius:999px;padding:10px 24px;font-size:14px;margin-top:16px;display:inline-block}
+.btn-ghost{background:#fff;color:#475569;border:1px solid #e2e8f0;flex:1}
+.btn-danger{background:#f43f5e;color:#fff;flex:1}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.stat{background:rgba(255,255,255,.8);border:1px solid #d1fae5;border-radius:16px;padding:12px 8px;text-align:center}
+.stat .v{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}
+.stat .l{font-size:11px;color:#94a3b8;margin-top:2px}
+.stat .i{font-size:18px}
+label{display:block;font-size:13px;font-weight:500;color:#64748b;margin:12px 0 5px}
+input,textarea,select{width:100%;border:1.5px solid #a7f3d0;border-radius:12px;padding:11px 14px;font-size:15px;background:rgba(255,255,255,.9);outline:none;font-family:inherit}
+input:focus,textarea:focus{border-color:#10b981}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.warn{display:flex;gap:10px;background:#fffbeb;border:1px solid #fde68a;color:#92400e;font-size:12px;line-height:1.7;border-radius:14px;padding:13px;margin-top:16px}
+h2.sec{font-size:16px;margin:18px 0 12px}
+.tl{border-left:2px solid #a7f3d0;padding-left:20px;position:relative}
+.tl-item{position:relative;margin-bottom:12px}
+.tl-item::before{content:"";position:absolute;left:-27px;top:6px;width:12px;height:12px;border-radius:50%;background:#e2e8f0;border:2px solid #fff}
+.tl-item.done::before{background:#10b981}
+.tl-card{border-radius:16px;padding:13px 15px;border:1px solid #f1f5f9;background:rgba(255,255,255,.6)}
+.tl-item.done .tl-card{background:rgba(236,253,245,.8);border-color:#a7f3d0}
+.tl-t{font-size:14px;font-weight:700;color:#94a3b8}
+.tl-item.done .tl-t{color:#047857}
+.tl-x{font-size:13px;color:#94a3b8;line-height:1.6;margin-top:2px}
+.tl-item.done .tl-x{color:#475569}
+.tag{display:inline-block;background:#d1fae5;color:#059669;font-size:10px;border-radius:99px;padding:2px 8px;margin-left:6px;vertical-align:middle}
+.progress{height:10px;background:#f1f5f9;border-radius:99px;overflow:hidden;margin-top:12px}
+.progress>div{height:100%;background:linear-gradient(90deg,#34d399,#14b8a6);border-radius:99px;transition:width .7s}
+.badges{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.badge{border-radius:16px;padding:16px 10px;text-align:center;border:1px solid #f1f5f9;background:rgba(255,255,255,.5)}
+.badge.on{background:linear-gradient(135deg,#fffbeb,#fff7ed);border-color:#fde68a}
+.badge .medal{width:52px;height:52px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;background:#f1f5f9;color:#cbd5e1}
+.badge.on .medal{background:linear-gradient(135deg,#fbbf24,#fb923c);color:#fff;box-shadow:0 6px 14px -4px rgba(251,146,60,.6)}
+.badge .bn{font-size:13px;font-weight:700;color:#94a3b8}
+.badge.on .bn{color:#b45309}
+.badge .bt{font-size:11px;color:#cbd5e1;line-height:1.5;margin-top:3px}
+.badge.on .bt{color:#d97706}
+.sos-hero{background:linear-gradient(90deg,#f43f5e,#f97316);color:#fff;border-radius:18px;padding:18px;box-shadow:0 10px 22px -8px rgba(244,63,94,.5);margin-bottom:14px}
+.breath{background:linear-gradient(180deg,#0ea5e9,#0891b2);color:#fff;border-radius:24px;padding:22px;text-align:center;margin-bottom:14px}
+.circle{width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.2);margin:20px auto;display:flex;align-items:center;justify-content:center;transition:transform 4s ease-in-out}
+.circle .in{width:92px;height:92px;border-radius:50%;background:rgba(255,255,255,.92);color:#0e7490;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700}
+.circle .in .n{font-size:24px;font-weight:900;font-variant-numeric:tabular-nums}
+.cope{display:flex;gap:12px;background:rgba(255,255,255,.7);border:1px solid #d1fae5;border-radius:16px;padding:13px;margin-bottom:10px}
+.cope .ic{width:38px;height:38px;border-radius:12px;background:#ecfdf5;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.cope .ct{font-size:14px;font-weight:600}
+.cope .cx{font-size:12px;color:#64748b;line-height:1.6;margin-top:2px}
+.moods{display:flex;justify-content:space-between;margin-top:14px}
+.moods button{border:none;background:none;font-size:26px;padding:6px 8px;border-radius:12px;cursor:pointer;opacity:.35;filter:grayscale(1)}
+.moods button.on{opacity:1;filter:none;background:#ecfdf5}
+.moods small{display:block;font-size:10px;color:#64748b;margin-top:2px}
+input[type=range]{accent-color:#059669;padding:0;border:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chips button{border:none;border-radius:99px;padding:7px 13px;font-size:12px;background:#f1f5f9;color:#64748b;cursor:pointer}
+.chips button.on{background:#059669;color:#fff}
+.entry{background:rgba(255,255,255,.7);border:1px solid #d1fae5;border-radius:16px;padding:14px;margin-bottom:10px}
+.entry .meta{display:flex;align-items:center;gap:8px;font-size:11px;color:#94a3b8}
+.entry .del{margin-left:auto;border:none;background:none;color:#cbd5e1;cursor:pointer;font-size:14px}
+.entry .note{font-size:14px;color:#475569;line-height:1.7;margin-top:8px;white-space:pre-wrap}
+nav{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-top:1px solid #d1fae5;z-index:10}
+nav .in{max-width:28rem;margin:0 auto;display:flex}
+nav button{flex:1;border:none;background:none;padding:9px 0 10px;font-size:11px;color:#94a3b8;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button.on{color:#059669;font-weight:700}
+nav button.on.sos{color:#f43f5e}
+nav button.sos{color:#fda4af}
+nav .nic{font-size:20px}
+.relapse-link{display:block;margin:6px auto 0;border:none;background:none;color:#94a3b8;font-size:12px;padding:8px;cursor:pointer}
+.relapse-box{background:#fff1f2;border:1px solid #fecdd3;border-radius:16px;padding:14px;margin-top:8px}
+.relapse-box p{font-size:13px;color:#be123c;line-height:1.7}
+.relapse-box .acts{display:flex;gap:10px;margin-top:12px}
+.quote{background:rgba(255,255,255,.6);border:1px solid #d1fae5;border-radius:16px;padding:14px;font-size:14px;color:#475569;line-height:1.7;margin-bottom:14px}
+.center{text-align:center}
+.setup-ic{width:64px;height:64px;border-radius:18px;background:#10b981;display:flex;align-items:center;justify-content:center;font-size:34px;margin:40px auto 16px;box-shadow:0 10px 22px -6px rgba(16,185,129,.5)}
+.muted{font-size:13px;color:#64748b;line-height:1.8}
+.tiny{font-size:11px;color:#94a3b8;text-align:center;margin-top:20px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.3);backdrop-filter:blur(2px);display:flex;align-items:flex-end;justify-content:center;z-index:20;padding:16px}
+.modal .box{background:#fff;border-radius:24px;padding:20px;width:100%;max-width:28rem}
+.hist{font-size:12px;color:#94a3b8;line-height:1.9}
+.timer-big{font-family:ui-monospace,monospace;font-size:38px;font-weight:900;font-variant-numeric:tabular-nums}
+.timer-ctrl{width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;font-size:17px;display:inline-flex;align-items:center;justify-content:center}
+.phoenix{display:flex;gap:12px;background:linear-gradient(90deg,#fff7ed,#fffbeb);border:1px solid #fde68a;border-radius:16px;padding:14px;margin-bottom:14px}
+.phoenix .pi{width:48px;height:48px;border-radius:14px;background:#fbbf24;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+"use strict";
+var KEY="sober-app-data-v1";
+var MILESTONES=[
+[1,"第一步","最勇敢的一步，你已经迈出去了"],[3,"三日清风","最难的三天正在过去"],[7,"一周新生","整整一周，身体开始感谢你"],
+[14,"两周坚持","皮肤、睡眠都在悄悄变好"],[21,"习惯萌芽","21 天，新习惯正在扎根"],[30,"满月之喜","一个月！肝脏脂肪开始减少"],
+[45,"半程蓄力","你已经超越了大多数人"],[60,"两月沉稳","情绪更稳，思路更清"],[90,"九十日蜕变","肝酶趋于正常，焕然一新"],
+[120,"四月耕耘","坚持已经成为你的本能"],[180,"半年重生","半年！心血管风险明显降低"],[270,"九月沉淀","你活成了自己想要的样子"],
+[365,"一年圆满","整整一年，这是真正的壮举"]];
+var HEALTH=[
+[1,"1 小时","身体开始代谢最后一滴酒精，肝脏启动自我修复。"],[12,"12 小时","血糖开始趋于稳定，身体逐步摆脱酒精脱水的影响。"],
+[24,"24 小时","体内酒精基本清除完毕，水分和血糖恢复平衡。"],[48,"48 小时","味觉和嗅觉开始变敏锐，睡眠质量初步改善。"],
+[72,"72 小时","急性戒断高峰过去，精力开始回升，早上醒来更轻松。"],[168,"1 周","深度睡眠增加，皮肤水分上升，血压开始下降。"],
+[336,"2 周","皮肤状态改善，体重可能开始回落，脂肪肝开始逆转。"],[720,"1 个月","肝脏脂肪明显减少，精力和专注力显著提升。"],
+[2160,"3 个月","肝酶趋于正常，免疫力改善，情绪更加稳定。"],[4320,"6 个月","肝脏炎症消退，心血管疾病风险明显降低。"],
+[8760,"1 年","肝脏显著再生，多种长期疾病风险大幅下降。"]];
+var QUOTES=["清醒不是一种牺牲，而是你送给自己的礼物。","你不需要酒精来面对今天，你比自己想象的强大。","每一次挺过渴望，你都在重新拿回生活的主导权。","戒酒不是失去一个老朋友，而是重新认识真正的自己。","今天的坚持，是明天的你感谢今天的原因。","渴望像海浪，会到达顶峰，然后退去。你只需要站稳。","一天就好。只要今天不喝，今天就赢了。","你戒掉的只是酒精，得到的却是整个清晨。","跌倒不可怕，站起来继续走的人才是勇者。","真正酷的事情，是第二天记得昨晚发生的一切。","压力不会因为你喝醉而消失，但会因为你的清醒而被解决。","你的身体正在修复，给它一点时间，也给自己一点耐心。"];
+var COPING=[
+["💧","喝一大杯水","口渴和饥饿常被误认为酒瘾。慢慢喝完一大杯水，等 10 分钟。"],
+["🚶","出门走 15 分钟","离开当下的环境。快走能促进内啡肽分泌，天然缓解焦虑。"],
+["📞","给一个信任的人打电话","说出来，渴望就卸掉了一半力气。不要独自硬扛。"],
+["⏱️","延迟 15 分钟","告诉自己「15 分钟后再决定」。大多数渴望撑不过 15 分钟。"],
+["📓","写下此刻的感受","去日记页记录这次渴望和诱因，看清它的规律就是削弱它。"],
+["🍎","吃点东西","低血糖会放大渴望。吃点水果或坚果，饱腹感能帮你稳住。"],
+["🚿","冷水洗脸 / 冲澡","冷刺激能快速切换神经状态，把注意力拉回身体当下。"],
+["🎯","回想戒酒的初衷","打开首页看看你写下的目标，和已经坚持的天数。"]];
+var TRIGGERS=["压力大","应酬饭局","情绪低落","无聊","失眠","朋友劝酒","习惯性想喝","庆祝场合"];
+var COMFORT=["一次复饮不会抹掉你之前的努力。康复很少是一条直线。","别自责，自责是复饮最好的燃料。看清诱因，明天继续。","你之前坚持的每一天都真实存在过，身体的修复也没有白费。","很多人都要尝试好几次才成功。重要的是你现在选择了重新开始。"];
+var MOODS=[["😖","很难受"],["🙁","低落"],["😐","一般"],["🙂","不错"],["😄","很好"]];
+var BREATH=[["吸气",4,1.25],["屏息",7,1.25],["缓慢呼气",8,.82]];
+function load(){try{var d=JSON.parse(localStorage.getItem(KEY));if(d)return Object.assign({profile:null,relapses:[],entries:[],pledges:[]},d)}catch(e){}return{profile:null,relapses:[],entries:[],pledges:[]}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}}
+var DB=load();
+var tab="home";
+var breathTimer=null,urgeTimer=null;
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function pad(n){return(n<10?"0":"")+n}
+function elapsed(){return Math.max(0,Date.now()-new Date(DB.profile.startDate).getTime())}
+function daysSober(){return Math.floor(elapsed()/864e5)}
+function fmtDate(iso){var d=new Date(iso);return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日"}
+function todayKey(){var d=new Date();return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+function $(s){return document.querySelector(s)}
+function app(){return document.getElementById("app")}
+function render(){
+  clearInterval(breathTimer);breathTimer=null;
+  clearInterval(urgeTimer);urgeTimer=null;
+  if(!DB.profile){app().innerHTML=setupHTML();bindSetup();return}
+  var body="";
+  if(tab==="home")body=dashHTML();
+  else if(tab==="health")body=healthHTML();
+  else if(tab==="badges")body=badgesHTML();
+  else if(tab==="sos")body=sosHTML();
+  else body=diaryHTML();
+  app().innerHTML=
+    '<header>🌱 <span>清醒 · 戒酒助手</span><button class="gear" id="gear" title="设置">⚙️</button></header>'+
+    '<div class="wrap">'+body+'</div>'+navHTML();
+  bindCommon();
+  if(tab==="home")bindDash();
+  if(tab==="sos")bindSos();
+  if(tab==="diary")bindDiary();
+}
+function navHTML(){
+  var tabs=[["home","🏠","首页"],["health","❤️","健康"],["badges","🏅","徽章"],["sos","🆘","SOS"],["diary","📓","日记"]];
+  var h='<nav><div class="in">';
+  for(var i=0;i<tabs.length;i++){
+    var t=tabs[i],on=tab===t[0],sos=t[0]==="sos";
+    h+='<button data-tab="'+t[0]+'" class="'+(on?"on":"")+(sos?" sos":"")+'"><span class="nic">'+(sos?"🛟":t[1])+'</span>'+t[2]+'</button>';
+  }
+  return h+"</div></nav>";
+}
+function bindCommon(){
+  var bs=document.querySelectorAll("nav button");
+  for(var i=0;i<bs.length;i++)bs[i].onclick=function(){tab=this.getAttribute("data-tab");render()};
+  $("#gear").onclick=showEdit;
+}
+function dailyQuote(){return QUOTES[Math.floor(Date.now()/864e5)%QUOTES.length]}
+function setupHTML(){
+  var d=new Date();
+  var today=d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+  return '<div class="wrap" style="padding-top:10px">'+
+  '<div class="center"><div class="setup-ic">🌱</div>'+
+  '<h1 style="font-size:22px">清醒 · 戒酒助手</h1>'+
+  '<p class="muted" style="margin-top:8px">一个完全私密的戒酒陪伴工具。<br>所有数据只保存在这台设备上，无需注册、不会上传。</p></div>'+
+  '<div class="card" style="margin-top:22px">'+
+  '<label>怎么称呼你</label><input id="s-name" placeholder="例如：老周">'+
+  '<div class="row2"><div><label>开始戒酒的日期</label><input type="date" id="s-date" value="'+today+'"></div>'+
+  '<div><label>时间</label><input type="time" id="s-time" value="00:00"></div></div>'+
+  '<div class="row2"><div><label>以前每天喝酒花多少钱（¥）</label><input type="number" min="0" id="s-cost" value="30"></div>'+
+  '<div><label>每天大约喝几杯/瓶</label><input type="number" min="0" id="s-drinks" value="2"></div></div>'+
+  '<label>写下你的戒酒初衷（想喝的时候回来看看）</label>'+
+  '<textarea id="s-goal" rows="3" placeholder="例如：为了家人，为了早上不再头痛，为了把压力真正解决掉……"></textarea>'+
+  '<div style="margin-top:16px"><button class="btn btn-primary" id="s-go">开始我的清醒之旅</button></div></div>'+
+  '<div class="warn"><span>⚠️</span><span>如果是长期大量饮酒者，突然完全停酒可能出现危险的戒断反应（震颤、幻觉、癫痫等）。请先咨询医生，必要时在医疗监护下戒酒。本工具不能替代专业医疗。</span></div>'+
+  '<p class="tiny">灵感来自 seaglade/Sobriety、SoberUp 等开源项目 · 数据仅存本机</p></div>';
+}
+function bindSetup(){
+  $("#s-go").onclick=function(){
+    var name=$("#s-name").value.trim()||"朋友";
+    var date=$("#s-date").value,time=$("#s-time").value||"00:00";
+    DB.profile={name:name,startDate:new Date(date+"T"+time+":00").toISOString(),
+      dailyCost:Math.max(0,+$("#s-cost").value||0),drinksPerDay:Math.max(0,+$("#s-drinks").value||0),
+      goal:$("#s-goal").value.trim()||"为了一个更清醒的自己"};
+    save();render();
+  };
+}
+function dashHTML(){
+  var p=DB.profile,d=daysSober(),ms=elapsed();
+  var saved=Math.round(ms/864e5*p.dailyCost),avoided=Math.floor(ms/864e5*p.drinksPerDay);
+  var best=d;for(var i=0;i<DB.relapses.length;i++)best=Math.max(best,DB.relapses[i].streakDays);
+  var pledged=DB.pledges.indexOf(todayKey())>=0;
+  var h='<div class="hero"><div style="font-size:14px;opacity:.9">'+esc(p.name)+'，你已经清醒了</div>'+
+    '<div class="days">'+d+'<small> 天</small></div>'+
+    '<div class="clock" id="clock"></div>'+
+    '<div class="sub">从 '+fmtDate(p.startDate)+' 开始</div>'+
+    '<button class="btn btn-white" id="pledge">'+(pledged?"✓ 今天已坚守":"今天我坚守住了")+'</button></div>'+
+  '<div class="grid3">'+
+    '<div class="stat"><div class="i">💰</div><div class="v">¥'+saved.toLocaleString()+'</div><div class="l">已省下</div></div>'+
+    '<div class="stat"><div class="i">🍺</div><div class="v">'+avoided+' 杯</div><div class="l">少喝了</div></div>'+
+    '<div class="stat"><div class="i">🔥</div><div class="v">'+best+' 天</div><div class="l">最长纪录</div></div></div>'+
+  '<div class="card" style="cursor:pointer" id="goal-card"><div style="font-size:14px;font-weight:600">🎯 我的戒酒初衷 <span style="float:right;font-size:11px;color:#94a3b8;font-weight:400">点我修改</span></div>'+
+    '<p class="muted" style="margin-top:6px">'+esc(p.goal)+'</p></div>'+
+  '<div class="quote">❝ '+dailyQuote()+' ❞</div>';
+  if(DB.relapses.length){
+    h+='<div class="card"><div style="font-size:14px;font-weight:600">📜 过往坚持记录<span class="muted" style="font-weight:400;font-size:12px">（这些努力都真实存在过）</span></div><div class="hist" style="margin-top:6px">';
+    for(var j=0;j<DB.relapses.length;j++)h+="· "+fmtDate(DB.relapses[j].date)+":坚持了 "+DB.relapses[j].streakDays+" 天<br>";
+    h+="</div></div>";
+  }
+  h+='<div id="relapse-zone"><button class="relapse-link" id="relapse-btn">🔄 我喝了，想重新开始</button></div>';
+  return h;
+}
+function tickClock(){
+  var el=document.getElementById("clock");if(!el)return;
+  var ms=elapsed();
+  el.textContent=pad(Math.floor(ms%864e5/36e5))+":"+pad(Math.floor(ms%36e5/6e4))+":"+pad(Math.floor(ms%6e4/1e3));
+}
+setInterval(function(){if(DB&&DB.profile&&tab==="home"){var c=document.getElementById("clock");if(c)tickClock();else{var dEl=document.querySelector(".hero .days");if(dEl)render();}}},1000);
+function bindDash(){
+  tickClock();
+  $("#pledge").onclick=function(){
+    var t=todayKey(),i=DB.pledges.indexOf(t);
+    if(i>=0)DB.pledges.splice(i,1);else DB.pledges.push(t);
+    save();render();
+  };
+  $("#goal-card").onclick=showEdit;
+  $("#relapse-btn").onclick=function(){
+    $("#relapse-zone").innerHTML='<div class="relapse-box"><p>'+COMFORT[Math.floor(Math.random()*COMFORT.length)]+'</p>'+
+    '<p style="font-size:11px;color:#fb7185;margin-top:8px">确认后会把这次坚持存入历史记录（不会被删除），计时器将从现在重新开始。要记录吗？</p>'+
+    '<div class="acts"><button class="btn btn-danger" id="relapse-yes">记录并重新开始</button><button class="btn btn-ghost" id="relapse-no">取消</button></div></div>';
+    $("#relapse-yes").onclick=function(){
+      DB.relapses.push({date:new Date().toISOString(),streakDays:daysSober()});
+      DB.profile.startDate=new Date().toISOString();
+      save();render();
+    };
+    $("#relapse-no").onclick=render;
+  };
+}
+function showEdit(){
+  var p=DB.profile;
+  var m=document.createElement("div");m.className="modal";m.id="modal";
+  m.innerHTML='<div class="box"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b>修改我的设置</b><button id="m-x" style="border:none;background:none;font-size:18px;color:#94a3b8;cursor:pointer">✕</button></div>'+
+  '<label>戒酒初衷</label><textarea id="m-goal" rows="3">'+esc(p.goal)+'</textarea>'+
+  '<div class="row2"><div><label>每天酒钱（¥）</label><input type="number" min="0" id="m-cost" value="'+p.dailyCost+'"></div>'+
+  '<div><label>每天几杯/瓶</label><input type="number" min="0" id="m-drinks" value="'+p.drinksPerDay+'"></div></div>'+
+  '<div style="margin-top:16px"><button class="btn btn-primary" id="m-save">保存</button></div></div>';
+  document.body.appendChild(m);
+  m.onclick=function(e){if(e.target===m)m.remove()};
+  $("#m-x").onclick=function(){m.remove()};
+  $("#m-save").onclick=function(){
+    p.goal=$("#m-goal").value.trim()||p.goal;
+    p.dailyCost=Math.max(0,+$("#m-cost").value||0);
+    p.drinksPerDay=Math.max(0,+$("#m-drinks").value||0);
+    save();m.remove();render();
+  };
+}
+function healthHTML(){
+  var hrs=elapsed()/36e5,done=0;
+  for(var i=0;i<HEALTH.length;i++)if(hrs>=HEALTH[i][0])done++;
+  var next=done<HEALTH.length?HEALTH[done][1]:null;
+  var h='<div class="card"><div style="font-weight:700">🌿 身体正在悄悄修复</div>'+
+  '<div class="progress"><div style="width:'+Math.round(done/HEALTH.length*100)+'%"></div></div>'+
+  '<p class="muted" style="font-size:12px;margin-top:8px">已解锁 '+done+'/'+HEALTH.length+' 个恢复阶段'+(next?"，下一个："+next:"，全部达成，了不起！")+'</p></div><div class="tl">';
+  for(var j=0;j<HEALTH.length;j++){
+    var it=HEALTH[j],ok=hrs>=it[0];
+    h+='<div class="tl-item'+(ok?" done":"")+'"><div class="tl-card"><div class="tl-t">'+it[1]+(ok?'<span class="tag">已解锁</span>':"")+'</div><div class="tl-x">'+it[2]+'</div></div></div>';
+  }
+  return h+'</div><p class="tiny" style="background:#f8fafc;border-radius:12px;padding:10px;line-height:1.7">时间线参考 NHS 等公开健康资料整理，个体恢复速度因人而异。如有不适请及时就医。</p>';
+}
+function badgesHTML(){
+  var d=daysSober(),earned=0;
+  for(var i=0;i<MILESTONES.length;i++)if(d>=MILESTONES[i][0])earned++;
+  var h='<div class="card center"><div style="font-size:28px">🏆</div><div style="font-weight:700;margin-top:6px">已获得 '+earned+' / '+MILESTONES.length+' 枚徽章</div><div class="muted" style="font-size:12px;margin-top:4px">每一个里程碑都值得被认真对待</div></div>';
+  if(DB.relapses.length)h+='<div class="phoenix"><div class="pi">🦅</div><div><div style="font-weight:700;color:#b45309">凤凰徽章</div><div class="muted" style="font-size:12px;color:#d97706">跌倒后重新站起来的人，比从未跌倒的人更强大。这枚徽章专属于你。</div></div></div>';
+  h+='<div class="badges">';
+  for(var j=0;j<MILESTONES.length;j++){
+    var m=MILESTONES[j],ok=d>=m[0];
+    h+='<div class="badge'+(ok?" on":"")+'"><div class="medal">'+(ok?m[0]:"🔒")+'</div><div class="bn">'+m[0]+' 天 · '+m[1]+'</div><div class="bt">'+m[2]+'</div></div>';
+  }
+  return h+"</div>";
+}
+function sosHTML(){
+  var h='<div class="sos-hero"><div style="font-size:18px;font-weight:900">🆘 现在特别想喝？</div>'+
+  '<div style="font-size:13px;opacity:.9;line-height:1.7;margin-top:4px">先做一轮呼吸，再开一个 15 分钟计时。你不需要永远不喝，只需要挺过这一刻。</div></div>'+
+  '<div class="breath"><div style="font-weight:700">🌬️ 4-7-8 呼吸法</div>'+
+  '<div style="font-size:11px;opacity:.8;margin-top:2px">用缓慢的呼吸告诉身体：现在是安全的</div>'+
+  '<div class="circle" id="br-circle"><div class="in"><span id="br-phase" style="font-size:13px">准备</span><span class="n" id="br-num"></span></div></div>'+
+  '<button class="btn btn-white" id="br-btn" style="color:#0e7490">▶ 开始呼吸</button>'+
+  '<div id="br-round" style="font-size:11px;opacity:.8;margin-top:8px"></div></div>'+
+  '<div class="card"><div style="font-weight:700">🌊 冲动冲浪 · 15 分钟</div>'+
+  '<p class="muted" style="font-size:13px;margin-top:8px">酒瘾像海浪：会升起、到达顶峰，然后退去——大多数冲动撑不过 15 分钟。不要对抗它，观察它，等它退潮。</p>'+
+  '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px">'+
+  '<span class="timer-big" id="ur-time">15:00</span><span>'+
+  '<button class="timer-ctrl" id="ur-toggle" style="background:#0891b2;color:#fff">▶</button> '+
+  '<button class="timer-ctrl" id="ur-reset" style="background:#f1f5f9;color:#64748b">↺</button></span></div>'+
+  '<div id="ur-done"></div></div>'+
+  '<h2 class="sec">还可以试试这些</h2>';
+  for(var i=0;i<COPING.length;i++)h+='<div class="cope"><div class="ic">'+COPING[i][0]+'</div><div><div class="ct">'+COPING[i][1]+'</div><div class="cx">'+COPING[i][2]+'</div></div></div>';
+  h+='<div class="quote" style="text-align:center;font-style:italic">“'+QUOTES[Math.floor(Math.random()*QUOTES.length)]+'”</div>'+
+  '<div class="warn"><span>🚑</span><span>如果出现手抖不止、大量出汗、幻觉、意识模糊等严重戒断症状，请立即就医或拨打 120，不要硬扛。</span></div>';
+  return h;
+}
+function bindSos(){
+  var bi=0,bleft=BREATH[0][1],running=false,round=0;
+  var circ=$("#br-circle");
+  $("#br-btn").onclick=function(){
+    if(running){running=false;clearInterval(breathTimer);breathTimer=null;this.textContent="▶ 继续";circ.style.transform="scale(1)";return}
+    running=true;bi=0;bleft=BREATH[0][1];this.textContent="⏸ 暂停";
+    $("#br-phase").textContent=BREATH[0][0];$("#br-num").textContent=bleft;
+    circ.style.transitionDuration=BREATH[0][1]+"s";circ.style.transform="scale("+BREATH[0][2]+")";
+    breathTimer=setInterval(function(){
+      bleft--;
+      if(bleft<=0){bi=(bi+1)%BREATH.length;bleft=BREATH[bi][1];if(bi===0){round++;$("#br-round").textContent="已完成 "+round+" 轮，感觉好一点了吗？"}
+        circ.style.transitionDuration=BREATH[bi][1]+"s";circ.style.transform="scale("+BREATH[bi][2]+")";}
+      var ph=document.getElementById("br-phase"),nm=document.getElementById("br-num");
+      if(ph){ph.textContent=BREATH[bi][0];nm.textContent=bleft}else{clearInterval(breathTimer);breathTimer=null}
+    },1000);
+  };
+  var UL=900,uleft=900,urun=false;
+  function drawUr(){var el=document.getElementById("ur-time");if(el)el.textContent=pad(Math.floor(uleft/60))+":"+pad(uleft%60)}
+  $("#ur-toggle").onclick=function(){
+    if(urun){urun=false;clearInterval(urgeTimer);urgeTimer=null;this.textContent="▶";return}
+    if(uleft<=0)uleft=UL;
+    urun=true;this.textContent="⏸";
+    urgeTimer=setInterval(function(){
+      uleft--;drawUr();
+      if(uleft<=0){clearInterval(urgeTimer);urgeTimer=null;urun=false;
+        var t=document.getElementById("ur-toggle");if(t)t.textContent="▶";
+        var d=document.getElementById("ur-done");
+        if(d)d.innerHTML='<p style="background:#ecfdf5;color:#047857;font-size:14px;font-weight:600;text-align:center;border-radius:12px;padding:10px;margin-top:12px">你挺过来了！这次渴望已经成为过去 🎉</p>';}
+    },1000);
+  };
+  $("#ur-reset").onclick=function(){urun=false;clearInterval(urgeTimer);urgeTimer=null;uleft=UL;drawUr();$("#ur-toggle").textContent="▶";$("#ur-done").innerHTML=""};
+}
+var dMood=3,dCraving=0,dTrig=[];
+function diaryHTML(){
+  var h='<div class="card"><div style="font-weight:700">📓 今天感觉怎么样？</div><div class="moods">';
+  for(var i=0;i<MOODS.length;i++)h+='<button data-mood="'+(i+1)+'" class="'+(dMood===i+1?"on":"")+'">'+MOODS[i][0]+'<small>'+MOODS[i][1]+'</small></button>';
+  h+='</div><div style="display:flex;justify-content:space-between;font-size:14px;margin-top:16px"><span style="color:#64748b;font-weight:500">想喝的程度</span><b id="cr-v" style="color:'+(dCraving>=7?"#f43f5e":dCraving>=4?"#f59e0b":"#059669")+'">'+dCraving+'/10</b></div>'+
+  '<input type="range" min="0" max="10" value="'+dCraving+'" id="cr">'+
+  '<label style="margin-top:14px">是什么让你想喝？（可多选）</label><div class="chips">';
+  for(var j=0;j<TRIGGERS.length;j++)h+='<button data-tg="'+TRIGGERS[j]+'" class="'+(dTrig.indexOf(TRIGGERS[j])>=0?"on":"")+'">'+TRIGGERS[j]+'</button>';
+  h+='</div><textarea id="d-note" rows="4" style="margin-top:14px" placeholder="随便写点什么：今天的压力、挺过去的瞬间、想对以后的自己说的话……"></textarea>'+
+  '<div style="margin-top:12px"><button class="btn btn-primary" id="d-save">记录今天</button></div></div>';
+  if(!DB.entries.length)h+='<p class="muted center" style="padding:24px 0;font-size:13px">还没有日记。记录渴望和诱因，是看清它们的第一步。</p>';
+  for(var k=0;k<DB.entries.length;k++){
+    var e=DB.entries[k],d=new Date(e.date);
+    h+='<div class="entry"><div class="meta">'+MOODS[e.mood-1][0]+' '+fmtDate(e.date)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
+    if(e.craving>0)h+=' <span class="tag" style="margin:0;background:'+(e.craving>=7?"#fff1f2":"#fffbeb")+';color:'+(e.craving>=7?"#f43f5e":"#d97706")+'">渴望 '+e.craving+'/10</span>';
+    h+='<button class="del" data-del="'+e.id+'">🗑</button></div>';
+    if(e.triggers.length){h+='<div class="chips" style="margin-top:8px">';for(var t=0;t<e.triggers.length;t++)h+='<button class="on" style="cursor:default;background:#f1f5f9;color:#64748b;font-size:10px;padding:3px 9px">'+esc(e.triggers[t])+'</button>';h+='</div>'}
+    if(e.note)h+='<p class="note">'+esc(e.note)+'</p>';
+    h+='</div>';
+  }
+  return h;
+}
+function bindDiary(){
+  var mb=document.querySelectorAll("[data-mood]");
+  for(var i=0;i<mb.length;i++)mb[i].onclick=function(){dMood=+this.getAttribute("data-mood");render()};
+  $("#cr").oninput=function(){dCraving=+this.value;var v=$("#cr-v");v.textContent=dCraving+"/10";v.style.color=dCraving>=7?"#f43f5e":dCraving>=4?"#f59e0b":"#059669"};
+  var tg=document.querySelectorAll("[data-tg]");
+  for(var j=0;j<tg.length;j++)tg[j].onclick=function(){
+    var t=this.getAttribute("data-tg"),k=dTrig.indexOf(t);
+    if(k>=0)dTrig.splice(k,1);else dTrig.push(t);
+    this.className=this.className==="on"?"":"on";
+  };
+  $("#d-save").onclick=function(){
+    var note=$("#d-note").value.trim();
+    if(!note&&dCraving===0&&!dTrig.length)return;
+    DB.entries.unshift({id:""+Date.now(),date:new Date().toISOString(),mood:dMood,craving:dCraving,triggers:dTrig.slice(),note:note});
+    dMood=3;dCraving=0;dTrig=[];
+    save();render();
+  };
+  var del=document.querySelectorAll("[data-del]");
+  for(var x=0;x<del.length;x++)del[x].onclick=function(){
+    var id=this.getAttribute("data-del");
+    DB.entries=DB.entries.filter(function(e){return e.id!==id});
+    save();render();
+  };
+}
+render();
+</script>
+</body>
+</html>
